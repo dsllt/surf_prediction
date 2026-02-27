@@ -14,12 +14,13 @@
     "lint:fix": "eslint ./src ./test --fix",
     "style:check": "prettier --check 'src/**/*.ts' 'test/**/*.ts'",
     "style:fix": "prettier --write 'src/**/*.ts' 'test/**/*.ts'",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:unit": "jest",
     "test:functional": "jest --projects ./test --runInBand"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.4",
     "@eslint/js": "^10.0.1",
+    "@types/axios": "^0.14.4",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/module-alias": "^2.0.4",
@@ -37,6 +38,7 @@
   },
   "dependencies": {
     "@overnightjs/core": "^1.7.6",
+    "axios": "^1.13.5",
     "body-parser": "^2.2.2",
     "express": "^5.2.1",
     "module-alias": "^2.3.4"
