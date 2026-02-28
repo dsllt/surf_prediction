@@ -1,5 +1,5 @@
 import { Server } from '@overnightjs/core';
-import './util/module-alias';
+import './utils/module-alias';
 import bodyParser from 'body-parser';
 import { ForecastController } from './controllers/forecast';
 import { Application } from 'express';
