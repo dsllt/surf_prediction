@@ -21,6 +21,7 @@
     "@eslint/eslintrc": "^3.3.4",
     "@eslint/js": "^10.0.1",
     "@types/axios": "^0.14.4",
+    "@types/config": "^0.0.40",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/module-alias": "^2.0.4",
@@ -40,6 +41,7 @@
     "@overnightjs/core": "^1.7.6",
     "axios": "^1.13.5",
     "body-parser": "^2.2.2",
+    "config": "^3.3.6",
     "express": "^5.2.1",
     "module-alias": "^2.3.4"
   }
