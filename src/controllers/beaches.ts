@@ -1,10 +1,23 @@
 import { Controller, Post } from '@overnightjs/core';
+import { Beach } from '@src/models/beach';
 import { Request, Response } from 'express';
+import mongoose from 'mongoose';
 
 @Controller('beaches')
 export class BeachesController {
   @Post('')
   public async createBeach(req: Request, res: Response): Promise<void> {
-    res.status(201).send({ ...req.body, id: 'test-id' });
+    try {
+      const beach = new Beach(req.body);
+      const result = await beach.save();
+      res.status(201).send(result);
+    } catch (err) {
+      const formattedErr = err as { message: string };
+      if (err instanceof mongoose.Error.ValidationError) {
+        res.status(422).send({ error: formattedErr.message });
+      } else {
+        res.status(500).send({ error: 'Internal Server Error' });
+      }
+    }
   }
 }
