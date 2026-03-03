@@ -15,7 +15,8 @@
     "style:check": "prettier --check 'src/**/*.ts' 'test/**/*.ts'",
     "style:fix": "prettier --write 'src/**/*.ts' 'test/**/*.ts'",
     "test:unit": "jest",
-    "test:functional": "jest --projects ./test --runInBand"
+    "test:functional": "jest --projects ./test --runInBand",
+    "test": "yarn test:unit && yarn test:functional"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.4",
