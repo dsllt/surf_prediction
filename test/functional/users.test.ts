@@ -55,4 +55,72 @@ describe('Users functional testes', () => {
       });
     });
   });
+
+  describe.only('When authenticating a user', () => {
+    it('should generate a token for a valid user', async () => {
+      const newUser = {
+        name: 'John Doe',
+        email: 'joe@email.com',
+        password: '1234',
+      };
+      const user = new User(newUser);
+      await user.save();
+
+      const response = await global.testRequest
+        .post('/users/authenticate')
+        .send({
+          email: newUser.email,
+          password: newUser.password,
+        });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(
+        expect.objectContaining({ token: expect.any(String) })
+      );
+    });
+
+    it('should return UNAUTHORIZED if the user email is not found', async () => {
+      const newUser = {
+        name: 'John Doe',
+        email: 'joe@email.com',
+        password: '1234',
+      };
+
+      const response = await global.testRequest
+        .post('/users/authenticate')
+        .send({
+          email: newUser.email,
+          password: newUser.password,
+        });
+
+      expect(response.status).toBe(401);
+      expect(response.body).toEqual({
+        status: 401,
+        error: 'User not found',
+      });
+    });
+
+    it('should return UNAUTHORIZED if the user exists but the password does not match', async () => {
+      const newUser = {
+        name: 'John Doe',
+        email: 'joe@email.com',
+        password: '1234',
+      };
+      const user = new User(newUser);
+      await user.save();
+
+      const response = await global.testRequest
+        .post('/users/authenticate')
+        .send({
+          email: newUser.email,
+          password: 'wrong_password',
+        });
+
+      expect(response.status).toBe(401);
+      expect(response.body).toEqual({
+        status: 401,
+        error: 'Wrong user or password',
+      });
+    });
+  });
 });
