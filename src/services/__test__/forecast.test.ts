@@ -2,11 +2,13 @@ import { StormGlass } from '@src/clients/stormGlass';
 import stormGlassNormalizedResponseFixture from '@test/fixtures/stormglass_normalized_response_3_hours.json';
 import { Forecast, ForecastProcessingInternalError } from '../forecast';
 import { Beach, BeachPosition } from '@src/models/beach';
+import mongoose from 'mongoose';
 
 jest.mock('@src/clients/stormGlass.ts');
 
 describe('Forecast Service', () => {
   const mockedStormGlassService = new StormGlass() as jest.Mocked<StormGlass>;
+  const mockUserId = new mongoose.Types.ObjectId();
 
   it('should return a forecast for a list of beaches', async () => {
     mockedStormGlassService.fetchPoints.mockResolvedValue(
@@ -18,6 +20,7 @@ describe('Forecast Service', () => {
         lng: 151.289824,
         name: 'Manly',
         position: BeachPosition.E,
+        user: mockUserId,
       },
     ];
     const expectedResponse = [
@@ -101,6 +104,7 @@ describe('Forecast Service', () => {
         lng: 151.289824,
         name: 'Manly',
         position: BeachPosition.E,
+        user: mockUserId,
       },
     ];
 

@@ -1,4 +1,5 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
+
 export enum BeachPosition {
   S = 'S',
   E = 'E',
@@ -12,20 +13,24 @@ export interface Beach {
   lng: number;
   name: string;
   position: BeachPosition;
+  user: Types.ObjectId;
 }
 
-const schema = new mongoose.Schema<Beach>(
-  {
-    lat: { type: Number, required: true },
-    lng: { type: Number, required: true },
-    name: { type: String, required: true },
-    position: { type: String, required: true },
-  },
+const schemaDefinition = {
+  lat: { type: Number, required: true },
+  lng: { type: Number, required: true },
+  name: { type: String, required: true },
+  position: { type: String, required: true },
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+};
+
+const schema = new Schema(
+  schemaDefinition as mongoose.SchemaDefinition<Beach>,
   {
     toJSON: {
       transform: (
-        _,
-        { _id, __v: _version, ...rest }
+        _: unknown,
+        { _id, __v: _version, ...rest }: Record<string, unknown>
       ): Record<string, unknown> => {
         void _version;
         return { id: _id, ...rest };
@@ -34,4 +39,4 @@ const schema = new mongoose.Schema<Beach>(
   }
 );
 
-export const Beach: Model<Beach> = mongoose.model('Beach', schema);
+export const Beach = mongoose.model<Beach & Document>('Beach', schema);
