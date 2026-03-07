@@ -1,11 +1,11 @@
 {
   "App": {
-    "port": "APP_PORT",
+    "port": "PORT",
     "database": {
       "mongoUrl": "MONGODB_URL"
     },
     "resources": {
-      "stormGlass": {
+      "StormGlass": {
         "apiUrl": "STORM_GLASS_API_URL",
         "apiToken": "STORM_GLASS_API_TOKEN"
       }
