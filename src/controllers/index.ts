@@ -1,3 +1,4 @@
+import logger from '@src/logger';
 import { CUSTOM_VALIDATION } from '@src/models/users';
 import { Response } from 'express';
 import { Error as MongooseError } from 'mongoose';
@@ -10,6 +11,7 @@ export abstract class BaseController {
       const clientErrors = this.handleClientErrors(error);
       res.status(clientErrors.code).send(clientErrors);
     } else {
+      logger.error(error);
       res.status(500).send({ code: 500, error: 'Internal Server Error' });
     }
   }
