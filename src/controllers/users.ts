@@ -18,31 +18,29 @@ export class UsersController extends BaseController {
   }
 
   @Post('authenticate')
-  public async authenticateUser(req: Request, res: Response): Promise<void> {
+  public async authenticateUser(
+    req: Request,
+    res: Response
+  ): Promise<Response> {
     const { email, password } = req.body;
-    try {
-      const user = await User.findOne({ email: email });
-      if (!user) {
-        res.status(401).send({
-          status: 401,
-          error: 'User not found',
-        });
-        return;
-      }
 
-      if (!(await AuthService.comparePasswords(password, user.password))) {
-        res.status(401).send({
-          status: 401,
-          error: 'Wrong user or password',
-        });
-        return;
-      }
-
-      const token = AuthService.generateToken(user.toJSON());
-
-      res.status(200).send({ token });
-    } catch (error) {
-      this.sendCreateUpdateErrorResponse(res, error as Error);
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return this.sendErrorResponse(res, {
+        code: 401,
+        message: 'User not found',
+      });
     }
+
+    if (!(await AuthService.comparePasswords(password, user.password))) {
+      return this.sendErrorResponse(res, {
+        code: 401,
+        message: 'Wrong user or password',
+      });
+    }
+
+    const token = AuthService.generateToken(user.toJSON());
+
+    return res.status(200).send({ token });
   }
 }
