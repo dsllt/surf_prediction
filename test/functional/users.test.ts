@@ -128,4 +128,44 @@ describe('Users functional testes', () => {
       });
     });
   });
+
+  describe('When getting user profile info', () => {
+    it('should return the users profile information', async () => {
+      const newUser = {
+        name: 'John Doe',
+        email: 'joe@email.com',
+        password: '1234',
+      };
+      const user = await new User(newUser).save();
+      const token = AuthService.generateToken(user.toJSON());
+
+      const response = await global.testRequest
+        .get('/users/me')
+        .set({ 'x-access-token': token });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toMatchObject(JSON.parse(JSON.stringify({ user })));
+    });
+
+    it('should return Not Found when the user is not found', async () => {
+      const newUser = {
+        name: 'John Doe',
+        email: 'joe@email.com',
+        password: '1234',
+      };
+      const user = new User(newUser);
+      const token = AuthService.generateToken(user.toJSON());
+
+      const response = await global.testRequest
+        .get('/users/me')
+        .set({ 'x-access-token': token });
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({
+        code: 404,
+        error: 'Not Found',
+        message: 'User not found',
+      });
+    });
+  });
 });
