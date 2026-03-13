@@ -40,6 +40,7 @@ export class SetupServer extends Server {
   }
 
   private setupExpress(): void {
+    this.app.set('trust proxy', true);
     this.app.use(
       expressPino({ logger } as unknown as Parameters<typeof expressPino>[0])
     );
