@@ -1,3 +1,5 @@
+import swaggerUi from 'swagger-ui-express';
+import apiSchema from './api-schema.json';
 import { Server } from '@overnightjs/core';
 import './utils/module-alias';
 import bodyParser from 'body-parser';
@@ -9,6 +11,7 @@ import { UsersController } from './controllers/users';
 import logger from './logger';
 import expressPino from 'express-pino-logger';
 import cors from 'cors';
+import * as OpenApiValidator from 'express-openapi-validator';
 
 export class SetupServer extends Server {
   constructor(private port = 3000) {
@@ -18,6 +21,7 @@ export class SetupServer extends Server {
   public async init(): Promise<void> {
     this.setupExpress();
     this.setupControllers();
+    this.docsSetup();
     await this.databaseSetup();
   }
 
@@ -36,7 +40,9 @@ export class SetupServer extends Server {
   }
 
   private setupExpress(): void {
-    this.app.use(expressPino({ logger } as unknown as Parameters<typeof expressPino>[0]));
+    this.app.use(
+      expressPino({ logger } as unknown as Parameters<typeof expressPino>[0])
+    );
     this.app.use(bodyParser.json());
     this.app.use(
       cors({
@@ -58,5 +64,16 @@ export class SetupServer extends Server {
 
   private async databaseSetup(): Promise<void> {
     await database.connect();
+  }
+
+  private docsSetup(): void {
+    this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(apiSchema));
+    this.app.use(
+      OpenApiValidator.middleware({
+        apiSpec: apiSchema as Parameters<typeof OpenApiValidator.middleware>[0]['apiSpec'],
+        validateRequests: true,
+        validateResponses: true,
+      })
+    );
   }
 }
