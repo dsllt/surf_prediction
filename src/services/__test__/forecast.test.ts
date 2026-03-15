@@ -3,12 +3,17 @@ import stormGlassNormalizedResponseFixture from '@test/fixtures/stormglass_norma
 import { Forecast, ForecastProcessingInternalError } from '../forecast';
 import { Beach, GeoPosition } from '@src/models/beach';
 import mongoose, { Types } from 'mongoose';
+import CacheUtil from '@src/utils/cache';
 
 jest.mock('@src/clients/stormGlass.ts');
 
 describe('Forecast Service', () => {
   const mockedStormGlassService = new StormGlass() as jest.Mocked<StormGlass>;
   const mockUserId = new mongoose.Types.ObjectId();
+
+  beforeEach(() => {
+    CacheUtil.clearAllCache();
+  });
 
   it('should return a forecast for a list of beaches', async () => {
     mockedStormGlassService.fetchPoints.mockResolvedValue(
@@ -41,7 +46,6 @@ describe('Forecast Service', () => {
             waveHeight: 0.47,
             windDirection: 299.45,
             windSpeed: 100,
-            userId: mockUserId,
           },
         ],
       },
@@ -62,7 +66,6 @@ describe('Forecast Service', () => {
             waveHeight: 0.46,
             windDirection: 310.48,
             windSpeed: 100,
-            userId: mockUserId,
           },
         ],
       },
@@ -83,7 +86,6 @@ describe('Forecast Service', () => {
             waveHeight: 0.46,
             windDirection: 321.5,
             windSpeed: 100,
-            userId: mockUserId,
           },
         ],
       },
@@ -180,7 +182,6 @@ describe('Forecast Service', () => {
             waveHeight: 2.07,
             windDirection: 299.45,
             windSpeed: 100,
-            userId: 'fake-id',
           },
           {
             lat: -33.792726,
@@ -196,7 +197,6 @@ describe('Forecast Service', () => {
             waveHeight: 0.46,
             windDirection: 310.48,
             windSpeed: 100,
-            userId: 'fake-id',
           },
         ],
       },

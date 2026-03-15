@@ -2,6 +2,8 @@ import { InternalError } from '@src/utils/errors/internal-error';
 import config, { IConfig } from 'config';
 import * as HTTPUtil from '@src/utils/request';
 import { TimeUtil } from '@src/utils/time';
+import logger from '@src/logger';
+import CacheUtil from '@src/utils/cache';
 
 export interface StormGlassPointSource {
   [key: string]: number;
@@ -57,9 +59,55 @@ export class StormGlass {
     'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed';
   readonly stormGlassAPISource = 'noaa';
 
-  constructor(protected request = new HTTPUtil.Request()) {}
+  constructor(
+    protected request = new HTTPUtil.Request(),
+    protected cacheUtil = CacheUtil
+  ) {}
 
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
+    const cachedForecastPoints = this.getForecastPointsFromCache(
+      this.getCacheKey(lat, lng)
+    );
+
+    if (!cachedForecastPoints) {
+      const forecastPoints = await this.getForecastPointsFromApi(lat, lng);
+      this.setForecastPointsInCache(this.getCacheKey(lat, lng), forecastPoints);
+      return forecastPoints;
+    }
+
+    return cachedForecastPoints;
+  }
+
+  private getForecastPointsFromCache(key: string): ForecastPoint[] | undefined {
+    const forecastPointsFromCache = this.cacheUtil.get<ForecastPoint[]>(key);
+    if (!forecastPointsFromCache) {
+      return;
+    }
+    logger.info(`Using cache to return forecast points for key: ${key}`);
+    return forecastPointsFromCache;
+  }
+
+  private getCacheKey(lat: number, lng: number): string {
+    return `forecast_points_${lat}_${lng}`;
+  }
+
+  private setForecastPointsInCache(
+    key: string,
+    forecastPoints: ForecastPoint[]
+  ): boolean {
+    logger.info(`Updating cache to use forecast points for key: ${key}`);
+
+    return this.cacheUtil.set(
+      key,
+      forecastPoints,
+      stormGlassResourceConfig.get('cacheApiTtl')
+    );
+  }
+
+  private async getForecastPointsFromApi(
+    lat: number,
+    lng: number
+  ): Promise<ForecastPoint[]> {
     const endTimeStamp = TimeUtil.getUnixTimeForAFutureDay(1);
     try {
       const response = await this.request.get<StormGlassForecastResponse>(
@@ -82,7 +130,6 @@ export class StormGlass {
       throw new ClientRequestError((err as { message: string }).message);
     }
   }
-
   private normalizeResponse(
     points: StormGlassForecastResponse
   ): ForecastPoint[] {

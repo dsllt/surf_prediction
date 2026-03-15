@@ -5,6 +5,7 @@ import apiForecastResponse1BeachFixture from '@test/fixtures/api_forecast_respon
 import { User } from '@src/models/users';
 import { AuthService } from '@src/services/auth';
 import { Types } from 'mongoose';
+import CacheUtil from '@src/utils/cache';
 
 describe('Beach forecast functional test', () => {
   let token: string;
@@ -25,6 +26,7 @@ describe('Beach forecast functional test', () => {
       userId: user.id as unknown as Types.ObjectId,
     };
     await new Beach(defaultBeach).save();
+    CacheUtil.clearAllCache();
     token = AuthService.generateToken(user.toJSON());
   });
 

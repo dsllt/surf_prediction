@@ -1041,6 +1041,13 @@
   dependencies:
     nock "*"
 
+"@types/node-cache@^4.2.5":
+  version "4.2.5"
+  resolved "https://registry.yarnpkg.com/@types/node-cache/-/node-cache-4.2.5.tgz#dac6be8bf8f486db4eef66f52f7bb9e90b65d2c1"
+  integrity sha512-faK2Owokboz53g8ooq2dw3iDJ6/HMTCIa2RvMte5WMTiABy+wA558K+iuyRtlR67Un5q9gEKysSDtqZYbSa0Pg==
+  dependencies:
+    node-cache "*"
+
 "@types/node@*", "@types/node@^25.3.1":
   version "25.3.1"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-25.3.1.tgz#82f3f6e30ac3b48560a092d9224a975b5c24e38d"
@@ -1406,6 +1413,11 @@ acorn@^8.11.0, acorn@^8.15.0, acorn@^8.16.0, acorn@^8.4.1:
   version "8.16.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.16.0.tgz#4ce79c89be40afe7afe8f3adb902a1f1ce9ac08a"
   integrity sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==
+
+add@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/add/-/add-2.0.6.tgz#248f0a9f6e5a528ef2295dbeec30532130ae2235"
+  integrity sha512-j5QzrmsokwWWp6kUcJQySpbG+xfOBqqKnup3OIk1pz+kB/80SLorZ9V8zHFLO92Lcd+hbvq8bT+zOGoPkmBV0Q==
 
 ajv-draft-04@^1.0.0:
   version "1.0.0"
@@ -1809,6 +1821,11 @@ cliui@^8.0.1:
     string-width "^4.2.0"
     strip-ansi "^6.0.1"
     wrap-ansi "^7.0.0"
+
+clone@2.x:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.2.tgz#1b7f4b9f591f1e8f83670401600345a02887435f"
+  integrity sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w==
 
 co@^4.6.0:
   version "4.6.0"
@@ -3756,6 +3773,13 @@ node-addon-api@^8.3.0:
   version "8.6.0"
   resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-8.6.0.tgz#b22497201b465cd0a92ef2c01074ee5068c79a6d"
   integrity sha512-gBVjCaqDlRUk0EwoPNKzIr9KkS9041G/q31IBShPs1Xz6UTA+EXdZADbzqAJQrpDRq71CIMnOP5VMut3SL0z5Q==
+
+node-cache@*, node-cache@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/node-cache/-/node-cache-5.1.2.tgz#f264dc2ccad0a780e76253a694e9fd0ed19c398d"
+  integrity sha512-t1QzWwnk4sjLWaQAS8CHgOJ+RAfmHpxFWmc36IWTiWHQfs0w5JDMBS1b1ZxQteo0vVVuWJvIUKHDkkeK7vIGCg==
+  dependencies:
+    clone "2.x"
 
 node-gyp-build@^4.8.4:
   version "4.8.4"
