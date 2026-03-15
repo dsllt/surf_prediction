@@ -20,7 +20,7 @@ describe('Forecast Service', () => {
         lng: 151.289824,
         name: 'Manly',
         position: GeoPosition.E,
-        user: mockUserId,
+        userId: mockUserId,
       },
     ];
     const expectedResponse = [
@@ -41,6 +41,7 @@ describe('Forecast Service', () => {
             waveHeight: 0.47,
             windDirection: 299.45,
             windSpeed: 100,
+            userId: mockUserId,
           },
         ],
       },
@@ -61,6 +62,7 @@ describe('Forecast Service', () => {
             waveHeight: 0.46,
             windDirection: 310.48,
             windSpeed: 100,
+            userId: mockUserId,
           },
         ],
       },
@@ -81,6 +83,7 @@ describe('Forecast Service', () => {
             waveHeight: 0.46,
             windDirection: 321.5,
             windSpeed: 100,
+            userId: mockUserId,
           },
         ],
       },
@@ -104,7 +107,7 @@ describe('Forecast Service', () => {
         lng: 151.289824,
         name: 'Manly',
         position: GeoPosition.E,
-        user: mockUserId,
+        userId: mockUserId,
       },
     ];
 
@@ -149,14 +152,14 @@ describe('Forecast Service', () => {
         lng: 151.289824,
         name: 'Manly',
         position: GeoPosition.E,
-        user: 'fake-id' as unknown as Types.ObjectId,
+        userId: 'fake-id' as unknown as Types.ObjectId,
       },
       {
         lat: -33.792726,
         lng: 141.289824,
         name: 'Dee Why',
         position: GeoPosition.S,
-        user: 'fake-id' as unknown as Types.ObjectId,
+        userId: 'fake-id' as unknown as Types.ObjectId,
       },
     ];
     const expectedResponse = [
@@ -177,6 +180,7 @@ describe('Forecast Service', () => {
             waveHeight: 2.07,
             windDirection: 299.45,
             windSpeed: 100,
+            userId: 'fake-id',
           },
           {
             lat: -33.792726,
@@ -192,6 +196,7 @@ describe('Forecast Service', () => {
             waveHeight: 0.46,
             windDirection: 310.48,
             windSpeed: 100,
+            userId: 'fake-id',
           },
         ],
       },

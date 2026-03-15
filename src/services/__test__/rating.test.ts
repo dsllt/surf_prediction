@@ -144,7 +144,7 @@ describe('Rating service', () => {
     });
     it('should get rating 3 for a waist height swell', () => {
       const rating = defaultRating.getRatingForSwellSize(1.5);
-      expect(rating).toBe(4);
+      expect(rating).toBe(3);
     });
     it('should get rating 5 for an overhead height swell', () => {
       const rating = defaultRating.getRatingForSwellSize(2.5);

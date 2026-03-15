@@ -4,10 +4,11 @@ import stormglassWeatherPointFixture from '@test/fixtures/stormglass_weather_3_h
 import apiForecastResponse1BeachFixture from '@test/fixtures/api_forecast_response_1_beach.json';
 import { User } from '@src/models/users';
 import { AuthService } from '@src/services/auth';
+import { Types } from 'mongoose';
 
 describe('Beach forecast functional test', () => {
   let token: string;
-  beforeAll(async () => {
+  beforeEach(async () => {
     await Beach.deleteMany({});
     await User.deleteMany({});
     const defaultUser = {
@@ -16,12 +17,12 @@ describe('Beach forecast functional test', () => {
       password: '1234',
     };
     const user = await new User(defaultUser).save();
-    const defaultBeach = {
+    const defaultBeach: Beach = {
       lat: -33.792726,
       lng: 151.289824,
       name: 'Manly',
       position: GeoPosition.E,
-      user: user.id,
+      userId: user.id as unknown as Types.ObjectId,
     };
     await new Beach(defaultBeach).save();
     token = AuthService.generateToken(user.toJSON());
@@ -65,7 +66,10 @@ describe('Beach forecast functional test', () => {
     })
       .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
       .get('/v2/weather/point')
-      .query((actualQuery) => actualQuery.lat === '-33.792726' && actualQuery.lng === '151.289824')
+      .query(
+        (actualQuery) =>
+          actualQuery.lat === '-33.792726' && actualQuery.lng === '151.289824'
+      )
       .replyWithError('Something went wrong.');
 
     const { status } = await global.testRequest

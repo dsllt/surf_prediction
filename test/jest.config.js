@@ -1,6 +1,6 @@
-const { resolve } = require('path')
-const root = resolve(__dirname, '..')
-const rootConfig = require(`${root}/jest.config.js`)
+const { resolve } = require('path');
+const root = resolve(__dirname, '..');
+const rootConfig = require(`${root}/jest.config.js`);
 
 module.exports = {
   ...rootConfig,
@@ -10,4 +10,4 @@ module.exports = {
     setupFilesAfterEnv: ['<rootDir>/test/jest-setup.ts'],
     testMatch: ['<rootDir>/test/**/*.test.ts'],
   },
-}
+};

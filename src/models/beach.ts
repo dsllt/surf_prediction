@@ -13,7 +13,7 @@ export interface Beach {
   lng: number;
   name: string;
   position: GeoPosition;
-  user: Types.ObjectId;
+  userId: Types.ObjectId;
 }
 
 const schemaDefinition = {
@@ -21,7 +21,7 @@ const schemaDefinition = {
   lng: { type: Number, required: true },
   name: { type: String, required: true },
   position: { type: String, required: true },
-  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 };
 
 const schema = new Schema(

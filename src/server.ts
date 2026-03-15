@@ -71,7 +71,9 @@ export class SetupServer extends Server {
     this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(apiSchema));
     this.app.use(
       OpenApiValidator.middleware({
-        apiSpec: apiSchema as Parameters<typeof OpenApiValidator.middleware>[0]['apiSpec'],
+        apiSpec: apiSchema as Parameters<
+          typeof OpenApiValidator.middleware
+        >[0]['apiSpec'],
         validateRequests: true,
         validateResponses: true,
       })
