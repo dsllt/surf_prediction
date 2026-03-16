@@ -137,7 +137,7 @@ describe('Users functional testes', () => {
         password: '1234',
       };
       const user = await new User(newUser).save();
-      const token = AuthService.generateToken(user.toJSON());
+      const token = AuthService.generateToken(user.id);
 
       const response = await global.testRequest
         .get('/users/me')
@@ -154,7 +154,7 @@ describe('Users functional testes', () => {
         password: '1234',
       };
       const user = new User(newUser);
-      const token = AuthService.generateToken(user.toJSON());
+      const token = AuthService.generateToken(user.id);
 
       const response = await global.testRequest
         .get('/users/me')

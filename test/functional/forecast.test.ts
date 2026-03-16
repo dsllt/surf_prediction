@@ -27,7 +27,7 @@ describe('Beach forecast functional test', () => {
     };
     await new Beach(defaultBeach).save();
     CacheUtil.clearAllCache();
-    token = AuthService.generateToken(user.toJSON());
+    token = AuthService.generateToken(user.id);
   });
 
   it('should return a forecast with just a few times', async () => {
@@ -79,5 +79,37 @@ describe('Beach forecast functional test', () => {
       .set({ 'x-access-token': token });
 
     expect(status).toBe(500);
+  });
+
+  it('should use cache to retrieve a forecast after first call to api', async () => {
+    nock('https://api.stormglass.io', {
+      encodedQueryParams: true,
+      reqheaders: {
+        Authorization: (): boolean => true,
+      },
+    })
+      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+      .get('/v2/weather/point')
+      .query((actualQuery) => {
+        return (
+          actualQuery.lat === '-33.792726' &&
+          actualQuery.lng === '151.289824' &&
+          actualQuery.params ===
+            'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed' &&
+          actualQuery.source === 'noaa' &&
+          typeof actualQuery.end === 'string'
+        );
+      })
+      .reply(200, stormglassWeatherPointFixture);
+
+    await global.testRequest.get('/forecast').set({ 'x-access-token': token });
+    await global.testRequest.get('/forecast').set({ 'x-access-token': token });
+
+    const { body, status } = await global.testRequest
+      .get('/forecast')
+      .set({ 'x-access-token': token });
+
+    expect(status).toBe(200);
+    expect(body).toEqual(apiForecastResponse1BeachFixture);
   });
 });
