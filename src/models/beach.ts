@@ -1,4 +1,5 @@
-import mongoose, { Document, Schema, Types } from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
+import { BaseModel } from '.';
 
 export enum GeoPosition {
   S = 'S',
@@ -7,13 +8,16 @@ export enum GeoPosition {
   N = 'N',
 }
 
-export interface Beach {
-  _id?: string;
+export interface Beach extends BaseModel {
   lat: number;
   lng: number;
   name: string;
   position: GeoPosition;
   userId: Types.ObjectId;
+}
+
+export interface ExistingBeach extends Beach {
+  id: string;
 }
 
 const schemaDefinition = {
@@ -33,10 +37,10 @@ const schema = new Schema(
         { _id, __v: _version, ...rest }: Record<string, unknown>
       ): Record<string, unknown> => {
         void _version;
-        return { id: _id, ...rest };
+        return { id: (_id as Types.ObjectId).toString(), ...rest };
       },
     },
   }
 );
 
-export const Beach = mongoose.model<Beach & Document>('Beach', schema);
+export const Beach = mongoose.model<Beach>('Beach', schema);

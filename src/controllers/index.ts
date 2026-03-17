@@ -1,14 +1,17 @@
 import logger from '@src/logger';
-import { CUSTOM_VALIDATION } from '@src/models/users';
+import {
+  DatabaseDuplicatedError,
+  DatabaseError,
+  DatabaseValidationError,
+} from '@src/repositories/repository';
 import ApiError, { APIError } from '@src/utils/errors/api-error';
 import { Response } from 'express';
-import { Error as MongooseError } from 'mongoose';
 export abstract class BaseController {
-  protected sendCreateUpdateErrorResponse(
-    res: Response,
-    error: MongooseError.ValidationError | Error
-  ): void {
-    if (error instanceof MongooseError.ValidationError) {
+  protected sendCreateUpdateErrorResponse(res: Response, error: unknown): void {
+    if (
+      error instanceof DatabaseValidationError ||
+      error instanceof DatabaseDuplicatedError
+    ) {
       const clientErrors = this.handleClientErrors(error);
       res.status(clientErrors.code).send(
         ApiError.format({
@@ -24,15 +27,11 @@ export abstract class BaseController {
     }
   }
 
-  private handleClientErrors(error: MongooseError.ValidationError): {
+  private handleClientErrors(error: DatabaseError): {
     code: number;
     error: string;
   } {
-    const duplicatedKindErrors = Object.values(error.errors).filter(
-      (err) => err.kind === CUSTOM_VALIDATION.DUPLICATED
-    );
-
-    if (duplicatedKindErrors.length) {
+    if (error instanceof DatabaseDuplicatedError) {
       return { code: 409, error: error.message };
     }
     return { code: 422, error: error.message };

@@ -26,7 +26,7 @@ describe('Users functional testes', () => {
       ).resolves.toBeTruthy();
     });
 
-    it('should return 400 when there is a validation error', async () => {
+    it('should return 422 when there is a validation error', async () => {
       const newUser = {
         name: 'John Doe',
         password: '1234',
@@ -40,6 +40,7 @@ describe('Users functional testes', () => {
         message: 'User validation failed: email: Path `email` is required.',
       });
     });
+
     it('should return 409 when the email is already registered', async () => {
       const newUser = {
         name: 'John Doe',

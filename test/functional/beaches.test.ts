@@ -45,6 +45,7 @@ describe('Beaches functional tests', () => {
         .post('/beaches')
         .set({ 'x-access-token': token })
         .send(newBeach);
+
       expect(response.status).toBe(422);
       expect(response.body).toEqual({
         code: 422,

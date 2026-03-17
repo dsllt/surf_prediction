@@ -4,14 +4,18 @@ import { Request, Response } from 'express';
 import { BaseController } from '.';
 import { AuthService } from '@src/services/auth';
 import { authMiddleware } from '@src/middlewares/auth';
+import { UserRepository } from '@src/repositories';
 
 @Controller('users')
 export class UsersController extends BaseController {
+  constructor(private userRepository: UserRepository) {
+    super();
+  }
+
   @Post('')
   public async createUser(req: Request, res: Response): Promise<void> {
     try {
-      const user = new User(req.body);
-      const result = await user.save();
+      const result = await this.userRepository.create(req.body);
       res.status(201).send(result);
     } catch (error) {
       this.sendCreateUpdateErrorResponse(res, error as Error);

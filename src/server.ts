@@ -12,6 +12,8 @@ import logger from './logger';
 import expressPino from 'express-pino-logger';
 import cors from 'cors';
 import * as OpenApiValidator from 'express-openapi-validator';
+import { BeachMongoDBRepository } from './repositories/beachMongoDbRepository';
+import { UserMongoDBRepository } from './repositories/userMongoDbRepository';
 
 export class SetupServer extends Server {
   constructor(private port = 3000) {
@@ -53,9 +55,11 @@ export class SetupServer extends Server {
   }
 
   private setupControllers() {
-    const forecastController = new ForecastController();
-    const beachesController = new BeachesController();
-    const usersController = new UsersController();
+    const beachRepository = new BeachMongoDBRepository();
+    const userRepository = new UserMongoDBRepository();
+    const forecastController = new ForecastController(beachRepository);
+    const beachesController = new BeachesController(beachRepository);
+    const usersController = new UsersController(userRepository);
     this.addControllers([
       forecastController,
       beachesController,
